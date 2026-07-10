@@ -18,7 +18,7 @@ abstract Handle(Handle_t) from Handle_t to Handle_t {
 	public inline function getData<T>():Data<T>
 		return cast this.data;
 
-	public inline function close(cb:cpp.Callable<cpp.RawPointer<UvHandle>->Void>)
+	public inline function close(cb:cpp.Callable<cpp.Star<UvHandle>->Void>)
 		Uv.close(this, cb);
 
 	public inline function isClosing()

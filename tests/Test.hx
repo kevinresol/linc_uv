@@ -71,7 +71,7 @@ class Test {
 	}
 
 	@:unreflective
-	static function onConnection(stream:RawPointer<UvStream>, status:Int) {
+	static function onConnection(stream:Star<UvStream>, status:Int) {
 		assertOk(status, "onConnection status");
 		serverClient = new Tcp();
 		hasServerClient = true;
@@ -82,14 +82,14 @@ class Test {
 	}
 
 	@:unreflective
-	static function onServerAlloc(handle:RawPointer<UvHandle>, suggestedSize:SizeT, buf:Star<Buf_t>) {
+	static function onServerAlloc(handle:Star<UvHandle>, suggestedSize:SizeT, buf:Star<Buf_t>) {
 		final size:Int = cast suggestedSize;
 		buf.base = untyped __cpp__('(char*){0}', Stdlib.nativeMalloc(size));
 		buf.len = cast size;
 	}
 
 	@:unreflective
-	static function onServerRead(handle:RawPointer<UvStream>, nread:SSizeT, buf:ConstStar<Buf_t>) {
+	static function onServerRead(handle:Star<UvStream>, nread:SSizeT, buf:ConstStar<Buf_t>) {
 		final n:Int = cast nread;
 		final stream:Stream = Native.stream(handle);
 		if (n > 0) {
@@ -108,13 +108,13 @@ class Test {
 	}
 
 	@:unreflective
-	static function onServerWrite(req:RawPointer<UvWrite>, status:Int) {
+	static function onServerWrite(req:Star<UvWrite>, status:Int) {
 		assertOk(status, "server write status");
 		serverWriteBuf.freeBase();
 	}
 
 	@:unreflective
-	static function onConnect(req:RawPointer<UvConnect>, status:Int) {
+	static function onConnect(req:Star<UvConnect>, status:Int) {
 		connectStatus = status;
 		assertOk(status, "onConnect");
 
@@ -130,20 +130,20 @@ class Test {
 	}
 
 	@:unreflective
-	static function onClientWrite(req:RawPointer<UvWrite>, status:Int) {
+	static function onClientWrite(req:Star<UvWrite>, status:Int) {
 		assertOk(status, "client write status");
 		clientWriteBuf.freeBase();
 	}
 
 	@:unreflective
-	static function onClientAlloc(handle:RawPointer<UvHandle>, suggestedSize:SizeT, buf:Star<Buf_t>) {
+	static function onClientAlloc(handle:Star<UvHandle>, suggestedSize:SizeT, buf:Star<Buf_t>) {
 		final size:Int = cast suggestedSize;
 		buf.base = untyped __cpp__('(char*){0}', Stdlib.nativeMalloc(size));
 		buf.len = cast size;
 	}
 
 	@:unreflective
-	static function onClientRead(handle:RawPointer<UvStream>, nread:SSizeT, buf:ConstStar<Buf_t>) {
+	static function onClientRead(handle:Star<UvStream>, nread:SSizeT, buf:ConstStar<Buf_t>) {
 		final n:Int = cast nread;
 		final stream:Stream = Native.stream(handle);
 		if (n > 0) {
@@ -171,7 +171,7 @@ class Test {
 	}
 
 	@:unreflective
-	static function onClose(handle:RawPointer<UvHandle>) {
+	static function onClose(handle:Star<UvHandle>) {
 		closed++;
 		if (closed >= expectedCloses)
 			loop.stop();

@@ -9,8 +9,15 @@ import uv.Shutdown.Shutdown_t;
 
 /**
 	Plain C struct aliases for libuv callback ABIs.
-	PointerType params become PointerType wrappers in fromStaticFunction,
-	which are not convertible to uv_*_cb (raw T*). Use these with RawPointer.
+
+	PointerType (Handle_t, Stream_t, …) is the marshalling analogue of cpp.Pointer:
+	a wrapper, fine when calling into C, but not usable in Callable.fromStaticFunction
+	signatures that must match uv_*_cb (raw T*).
+
+	These @:native stubs are the pointee type so Star<UvX> emits T* (same role as
+	cpp.Star in the hxcpp pointers cookbook). Native.* rewraps Star → PointerType
+	for abstracts. Prefer Star over RawPointer for object callbacks; keep RawPointer
+	for C arrays / opaque blobs (e.g. addrinfo*).
 **/
 @:native('uv_handle_t')
 extern class UvHandle {}
@@ -40,18 +47,18 @@ extern class UvGetAddrInfo {}
 extern class UvGetNameInfo {}
 
 class Native {
-	public static inline function handle(p:RawPointer<UvHandle>):Handle_t
+	public static inline function handle(p:Star<UvHandle>):Handle_t
 		return untyped __cpp__('::cpp::marshal::PointerType< ::uv_handle_t >({0})', p);
 
-	public static inline function stream(p:RawPointer<UvStream>):Stream_t
+	public static inline function stream(p:Star<UvStream>):Stream_t
 		return untyped __cpp__('::cpp::marshal::PointerType< ::uv_stream_t >({0})', p);
 
-	public static inline function connect(p:RawPointer<UvConnect>):Connect_t
+	public static inline function connect(p:Star<UvConnect>):Connect_t
 		return untyped __cpp__('::cpp::marshal::PointerType< ::uv_connect_t >({0})', p);
 
-	public static inline function write(p:RawPointer<UvWrite>):Write_t
+	public static inline function write(p:Star<UvWrite>):Write_t
 		return untyped __cpp__('::cpp::marshal::PointerType< ::uv_write_t >({0})', p);
 
-	public static inline function shutdown(p:RawPointer<UvShutdown>):Shutdown_t
+	public static inline function shutdown(p:Star<UvShutdown>):Shutdown_t
 		return untyped __cpp__('::cpp::marshal::PointerType< ::uv_shutdown_t >({0})', p);
 }

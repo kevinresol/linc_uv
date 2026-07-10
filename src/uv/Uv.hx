@@ -167,26 +167,26 @@ extern class Uv {
 
 	// timer
 	@:native("uv_timer_init") public static function timer_init(loop:Loop_t, timer:Timer_t):Int;
-	@:native("uv_timer_start") public static function timer_start(timer:Timer_t, cb:Callable<RawPointer<UvTimer>->Void>, timeout:UInt64, repeat:UInt64):Int;
+	@:native("uv_timer_start") public static function timer_start(timer:Timer_t, cb:Callable<Star<UvTimer>->Void>, timeout:UInt64, repeat:UInt64):Int;
 	@:native("uv_timer_stop") public static function timer_stop(timer:Timer_t):Int;
 
 	// tcp
 	@:native("uv_tcp_init") public static function tcp_init(loop:Loop_t, handle:Tcp_t):Int;
 	@:native("linc::uv::tcp_bind") public static function tcp_bind(handle:Tcp_t, addr:SockAddrIn_s, flags:Int):Int;
-	@:native("linc::uv::tcp_connect") public static function tcp_connect(req:Connect_t, handle:Tcp_t, addr:SockAddrIn_s, cb:Callable<RawPointer<UvConnect>->Int->Void>):Int;
+	@:native("linc::uv::tcp_connect") public static function tcp_connect(req:Connect_t, handle:Tcp_t, addr:SockAddrIn_s, cb:Callable<Star<UvConnect>->Int->Void>):Int;
 	@:native("uv_tcp_getsockname") public static function tcp_getsockname(handle:Tcp_t, name:SockAddrStorage_s, namelen:Star<Int>):Int;
 	@:native("uv_tcp_getpeername") public static function tcp_getpeername(handle:Tcp_t, name:SockAddrStorage_s, namelen:Star<Int>):Int;
 	@:native("uv_tcp_nodelay") public static function tcp_nodelay(handle:Tcp_t, enable:Int):Int;
 	@:native("uv_tcp_keepalive") public static function tcp_keepalive(handle:Tcp_t, enable:Int, delay:UInt):Int;
 
 	// stream
-	@:native("uv_shutdown") public static function shutdown(req:Shutdown_t, handle:Stream_t, cb:Callable<RawPointer<UvShutdown>->Int->Void>):Int;
-	@:native("uv_listen") public static function listen(handle:Stream_t, backlog:Int, cb:Callable<RawPointer<UvStream>->Int->Void>):Int;
+	@:native("uv_shutdown") public static function shutdown(req:Shutdown_t, handle:Stream_t, cb:Callable<Star<UvShutdown>->Int->Void>):Int;
+	@:native("uv_listen") public static function listen(handle:Stream_t, backlog:Int, cb:Callable<Star<UvStream>->Int->Void>):Int;
 	@:native("uv_accept") public static function accept(server:Stream_t, client:Stream_t):Int;
-	@:native("uv_read_start") public static function read_start(handle:Stream_t, alloc_cb:Callable<RawPointer<UvHandle>->SizeT->Star<Buf_t>->Void>,
-		read_cb:Callable<RawPointer<UvStream>->SSizeT->ConstStar<Buf_t>->Void>):Int;
+	@:native("uv_read_start") public static function read_start(handle:Stream_t, alloc_cb:Callable<Star<UvHandle>->SizeT->Star<Buf_t>->Void>,
+		read_cb:Callable<Star<UvStream>->SSizeT->ConstStar<Buf_t>->Void>):Int;
 	@:native("uv_read_stop") public static function read_stop(handle:Stream_t):Int;
-	@:native("uv_write") public static function write(req:Write_t, handle:Stream_t, bufs:Buf_t, nbufs:UInt32, cb:Callable<RawPointer<UvWrite>->Int->Void>):Int;
+	@:native("uv_write") public static function write(req:Write_t, handle:Stream_t, bufs:Buf_t, nbufs:UInt32, cb:Callable<Star<UvWrite>->Int->Void>):Int;
 	@:native("uv_try_write") public static function try_write(handle:Stream_t, bufs:Buf_t, nbufs:UInt32):Int;
 	@:native("uv_is_readable") public static function is_readable(handle:Stream_t):Int;
 	@:native("uv_is_writable") public static function is_writable(handle:Stream_t):Int;
@@ -194,7 +194,7 @@ extern class Uv {
 	// handle
 	@:native("uv_is_active") public static function is_active(handle:Handle_t):Int;
 	@:native("uv_is_closing") public static function is_closing(handle:Handle_t):Int;
-	@:native("uv_close") public static function close(handle:Handle_t, close_cb:Callable<RawPointer<UvHandle>->Void>):Void;
+	@:native("uv_close") public static function close(handle:Handle_t, close_cb:Callable<Star<UvHandle>->Void>):Void;
 	@:native("uv_ref") public static function ref(handle:Handle_t):Void;
 	@:native("uv_unref") public static function unref(handle:Handle_t):Void;
 	@:native("uv_has_ref") public static function has_ref(handle:Handle_t):Int;
@@ -202,21 +202,21 @@ extern class Uv {
 	@:native("uv_req_size") public static function req_size(type:ReqType):SizeT;
 
 	// fs
-	@:native("uv_fs_open") public static function fs_open(loop:Loop_t, req:Fs_t, path:ConstCharStar, flags:Int, mode:Int, cb:Callable<RawPointer<UvFs>->Void>):Int;
-	@:native("uv_fs_close") public static function fs_close(loop:Loop_t, req:Fs_t, file:File, cb:Callable<RawPointer<UvFs>->Void>):Int;
-	@:native("uv_fs_read") public static function fs_read(loop:Loop_t, req:Fs_t, file:File, bufs:Buf_t, nbufs:UInt32, offset:UInt64, cb:Callable<RawPointer<UvFs>->Void>):Int;
-	@:native("uv_fs_unlink") public static function fs_unlink(loop:Loop_t, req:Fs_t, path:ConstCharStar, cb:Callable<RawPointer<UvFs>->Void>):Int;
-	@:native("uv_fs_write") public static function fs_write(loop:Loop_t, req:Fs_t, file:File, bufs:Buf_t, nbufs:UInt32, offset:UInt64, cb:Callable<RawPointer<UvFs>->Void>):Int;
+	@:native("uv_fs_open") public static function fs_open(loop:Loop_t, req:Fs_t, path:ConstCharStar, flags:Int, mode:Int, cb:Callable<Star<UvFs>->Void>):Int;
+	@:native("uv_fs_close") public static function fs_close(loop:Loop_t, req:Fs_t, file:File, cb:Callable<Star<UvFs>->Void>):Int;
+	@:native("uv_fs_read") public static function fs_read(loop:Loop_t, req:Fs_t, file:File, bufs:Buf_t, nbufs:UInt32, offset:UInt64, cb:Callable<Star<UvFs>->Void>):Int;
+	@:native("uv_fs_unlink") public static function fs_unlink(loop:Loop_t, req:Fs_t, path:ConstCharStar, cb:Callable<Star<UvFs>->Void>):Int;
+	@:native("uv_fs_write") public static function fs_write(loop:Loop_t, req:Fs_t, file:File, bufs:Buf_t, nbufs:UInt32, offset:UInt64, cb:Callable<Star<UvFs>->Void>):Int;
 
 	// pipe
 	@:native("uv_pipe_init") public static function pipe_init(loop:Loop_t, handle:Pipe_t, ipc:Int):Int;
 	@:native("uv_pipe_open") public static function pipe_open(handle:Pipe_t, file:File):Int;
 
 	// dns
-	@:native("uv_getaddrinfo") public static function getaddrinfo(loop:Loop_t, req:GetAddrInfo_t, getaddrinfo_cb:Callable<RawPointer<UvGetAddrInfo>->Int->RawPointer<cpp.Void>->Void>,
+	@:native("uv_getaddrinfo") public static function getaddrinfo(loop:Loop_t, req:GetAddrInfo_t, getaddrinfo_cb:Callable<Star<UvGetAddrInfo>->Int->RawPointer<cpp.Void>->Void>,
 		node:ConstCharStar, service:ConstCharStar, hints:AddrInfo_s):Int;
 	@:native("uv_freeaddrinfo") public static function freeaddrinfo(ai:RawPointer<cpp.Void>):Void;
-	@:native("uv_getnameinfo") public static function getnameinfo(loop:Loop_t, req:GetNameInfo_t, getnameinfo_cb:Callable<RawPointer<UvGetNameInfo>->Int->ConstCharStar->ConstCharStar->Void>,
+	@:native("uv_getnameinfo") public static function getnameinfo(loop:Loop_t, req:GetNameInfo_t, getnameinfo_cb:Callable<Star<UvGetNameInfo>->Int->ConstCharStar->ConstCharStar->Void>,
 		addr:SockAddr_s, flags:Int):Int;
 
 	// misc
