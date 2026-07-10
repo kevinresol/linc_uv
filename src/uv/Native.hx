@@ -1,6 +1,11 @@
 package uv;
 
 import cpp.*;
+import uv.Handle.Handle_t;
+import uv.Stream.Stream_t;
+import uv.Connect.Connect_t;
+import uv.Write.Write_t;
+import uv.Shutdown.Shutdown_t;
 
 /**
 	Plain C struct aliases for libuv callback ABIs.

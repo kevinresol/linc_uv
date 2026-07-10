@@ -1,5 +1,15 @@
 package uv;
 
+import uv.Loop.Loop_t;
+import uv.Tcp.Tcp_t;
+import uv.Pipe.Pipe_t;
+import uv.Timer.Timer_t;
+import uv.Connect.Connect_t;
+import uv.Write.Write_t;
+import uv.Shutdown.Shutdown_t;
+import uv.Fs.Fs_t;
+import uv.GetAddrInfo.GetAddrInfo_t;
+
 /**
 	Malloc/free for libuv PointerType handles and requests.
 	PointerTypes have no constructors; callers own the memory until after close/completion.

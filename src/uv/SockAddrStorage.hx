@@ -2,6 +2,13 @@ package uv;
 
 import cpp.Stdlib;
 
+@:semantics(value)
+@:include('linc_uv.h')
+@:cpp.ValueType({type: 'sockaddr_storage'})
+extern class SockAddrStorage_s {
+	function new();
+}
+
 @:dce
 abstract SockAddrStorage(SockAddrStorage_s) from SockAddrStorage_s to SockAddrStorage_s {
 	public inline function new()

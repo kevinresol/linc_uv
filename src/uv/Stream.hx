@@ -1,9 +1,16 @@
 package uv;
 
+import uv.Handle.Handle_t;
 import uv.Native.UvHandle;
 import uv.Native.UvStream;
 import uv.Native.UvWrite;
 import uv.Native.UvShutdown;
+import uv.Buf.Buf_t;
+
+@:semantics(value)
+@:include('linc_uv.h')
+@:cpp.PointerType({type: 'uv_stream_t'})
+extern class Stream_t extends Handle_t {}
 
 @:dce
 abstract Stream(Stream_t) from Stream_t to Stream_t {

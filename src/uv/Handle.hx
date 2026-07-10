@@ -1,7 +1,14 @@
 package uv;
 
-import cpp.*;
+import cpp.Star;
 import uv.Native.UvHandle;
+
+@:semantics(value)
+@:include('linc_uv.h')
+@:cpp.PointerType({type: 'uv_handle_t'})
+extern class Handle_t {
+	var data:Star<cpp.Void>;
+}
 
 @:dce
 abstract Handle(Handle_t) from Handle_t to Handle_t {
@@ -11,7 +18,7 @@ abstract Handle(Handle_t) from Handle_t to Handle_t {
 	public inline function getData<T>():Data<T>
 		return cast this.data;
 
-	public inline function close(cb:cpp.Callable<RawPointer<UvHandle>->Void>)
+	public inline function close(cb:cpp.Callable<cpp.RawPointer<UvHandle>->Void>)
 		Uv.close(this, cb);
 
 	public inline function isClosing()

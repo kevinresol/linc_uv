@@ -1,5 +1,15 @@
 package uv;
 
+import uv.Req.Req_t;
+import uv.Stream.Stream_t;
+
+@:semantics(value)
+@:include('linc_uv.h')
+@:cpp.PointerType({type: 'uv_shutdown_t'})
+extern class Shutdown_t extends Req_t {
+	var handle:Stream_t;
+}
+
 @:dce
 abstract Shutdown(Shutdown_t) from Shutdown_t to Shutdown_t {
 	public var handle(get, never):Stream;

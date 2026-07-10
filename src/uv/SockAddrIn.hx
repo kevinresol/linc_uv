@@ -1,5 +1,12 @@
 package uv;
 
+@:semantics(value)
+@:include('linc_uv.h')
+@:cpp.ValueType({type: 'sockaddr_in'})
+extern class SockAddrIn_s {
+	function new();
+}
+
 @:dce
 abstract SockAddrIn(SockAddrIn_s) from SockAddrIn_s to SockAddrIn_s {
 	public inline function new()

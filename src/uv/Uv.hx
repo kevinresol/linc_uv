@@ -11,6 +11,24 @@ import uv.Native.UvTimer;
 import uv.Native.UvFs;
 import uv.Native.UvGetAddrInfo;
 import uv.Native.UvGetNameInfo;
+import uv.Loop.Loop_t;
+import uv.Handle.Handle_t;
+import uv.Stream.Stream_t;
+import uv.Tcp.Tcp_t;
+import uv.Pipe.Pipe_t;
+import uv.Timer.Timer_t;
+import uv.Connect.Connect_t;
+import uv.Write.Write_t;
+import uv.Shutdown.Shutdown_t;
+import uv.Req.Req_t;
+import uv.Fs.Fs_t;
+import uv.GetAddrInfo.GetAddrInfo_t;
+import uv.GetNameInfo.GetNameInfo_t;
+import uv.Buf.Buf_t;
+import uv.SockAddr.SockAddr_s;
+import uv.SockAddrIn.SockAddrIn_s;
+import uv.SockAddrStorage.SockAddrStorage_s;
+import uv.AddrInfo.AddrInfo_s;
 
 @:keep
 @:include('linc_uv.h')

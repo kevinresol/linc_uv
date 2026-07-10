@@ -7,7 +7,7 @@ import uv.Native.UvHandle;
 import uv.Native.UvStream;
 import uv.Native.UvConnect;
 import uv.Native.UvWrite;
-import uv.Uv;
+import uv.Buf.Buf_t;
 
 /**
 	In-process TCP echo: server listens, client connects and writes a payload,

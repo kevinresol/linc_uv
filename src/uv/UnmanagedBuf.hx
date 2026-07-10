@@ -1,5 +1,7 @@
 package uv;
 
+import uv.Buf.Buf_t;
+
 @:dce
 abstract UnmanagedBuf(cpp.ConstStar<Buf_t>) from cpp.ConstStar<Buf_t> to cpp.ConstStar<Buf_t> {
 	public inline function free()

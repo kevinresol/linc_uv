@@ -1,5 +1,12 @@
 package uv;
 
+import uv.Handle.Handle_t;
+
+@:semantics(value)
+@:include('linc_uv.h')
+@:cpp.PointerType({type: 'uv_timer_t'})
+extern class Timer_t extends Handle_t {}
+
 @:dce
 abstract Timer(Timer_t) from Timer_t to Timer_t {
 	public inline function new()

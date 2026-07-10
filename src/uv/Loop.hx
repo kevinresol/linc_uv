@@ -1,5 +1,14 @@
 package uv;
 
+import cpp.Star;
+
+@:semantics(value)
+@:include('linc_uv.h')
+@:cpp.PointerType({type: 'uv_loop_t'})
+extern class Loop_t {
+	var data:Star<cpp.Void>;
+}
+
 @:dce
 abstract Loop(Loop_t) from Loop_t to Loop_t {
 	public static var DEFAULT(get, never):Loop;

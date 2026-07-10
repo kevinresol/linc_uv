@@ -1,5 +1,15 @@
 package uv;
 
+import uv.Req.Req_t;
+import uv.Stream.Stream_t;
+
+@:semantics(value)
+@:include('linc_uv.h')
+@:cpp.PointerType({type: 'uv_write_t'})
+extern class Write_t extends Req_t {
+	var handle:Stream_t;
+}
+
 @:dce
 abstract Write(Write_t) from Write_t to Write_t {
 	public var handle(get, never):Stream;

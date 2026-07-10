@@ -1,7 +1,13 @@
 package uv;
 
 import cpp.*;
+import uv.Stream.Stream_t;
 import uv.Native.UvConnect;
+
+@:semantics(value)
+@:include('linc_uv.h')
+@:cpp.PointerType({type: 'uv_tcp_t'})
+extern class Tcp_t extends Stream_t {}
 
 @:dce
 abstract Tcp(Tcp_t) from Tcp_t to Tcp_t {
@@ -23,7 +29,7 @@ abstract Tcp(Tcp_t) from Tcp_t to Tcp_t {
 	public inline function getData<T>():Data<T>
 		return cast this.data;
 
-	public inline function connect(req:Connect, dest:SockAddrIn, cb:cpp.Callable<cpp.RawPointer<UvConnect>->Int->Void>)
+	public inline function connect(req:Connect, dest:SockAddrIn, cb:cpp.Callable<RawPointer<UvConnect>->Int->Void>)
 		return Uv.tcp_connect(req, this, dest, cb);
 
 	public inline function bind(addr:SockAddrIn, flags)

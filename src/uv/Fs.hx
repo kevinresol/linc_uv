@@ -1,5 +1,14 @@
 package uv;
 
+import uv.Req.Req_t;
+
+@:semantics(value)
+@:include('linc_uv.h')
+@:cpp.PointerType({type: 'uv_fs_t'})
+extern class Fs_t extends Req_t {
+	var result:SSizeT;
+}
+
 @:dce
 abstract Fs(Fs_t) from Fs_t to Fs_t {
 	public var result(get, never):Int;
