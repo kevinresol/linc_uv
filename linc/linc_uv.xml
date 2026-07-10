@@ -1,30 +1,42 @@
 <xml>
 
 	<!-- For a more in depth guide: https://github.com/snowkit/hxcpp-guide -->
-	<!-- References the original libuv build instructions: https://github.com/libuv/libuv/blob/v1.x/CMakeLists.txt -->
-	
+	<!-- References: https://github.com/libuv/libuv/blob/v1.x/CMakeLists.txt -->
+
 	<set name="UV" value="${LINC_UV_PATH}lib/libuv" />
-	
+
 	<files id="haxe">
 		<compilerflag value='-I${UV}'/>
 		<compilerflag value="-I${UV}/src/"/>
 		<compilerflag value="-I${UV}/include/"/>
 		<compilerflag value='-DWIN32_LEAN_AND_MEAN' if="windows" />
 		<compilerflag value='-D_WIN32_WINNT=0x0600' if="windows" />
-		<compilerflag value='-D_DARWIN_USE_64_BIT_INODE=1' if="mac" />
-		<compilerflag value='-D_DARWIN_UNLIMITED_SELECT=1' if="mac" />
-		<compilerflag value='-D_DARWIN_USE_64_BIT_INODE=1' if="macos" />
-		<compilerflag value='-D_DARWIN_UNLIMITED_SELECT=1' if="macos" />
+		<compilerflag value='-D_DARWIN_USE_64_BIT_INODE=1' if="mac || macos" />
+		<compilerflag value='-D_DARWIN_UNLIMITED_SELECT=1' if="mac || macos" />
 		<compilerflag value='-D_GNU_SOURCE' if="linux" />
 
-		<compilerflag value='-I${LINC_UV_PATH}linc/'/>	
+		<compilerflag value='-I${LINC_UV_PATH}linc/'/>
 		<file name='${LINC_UV_PATH}linc/linc_uv.cpp' />
+	</files>
+
+	<!-- Headers like Test.h may #include linc_uv.h; __main__/__lib__ need the same -I paths. -->
+	<files id="__main__">
+		<compilerflag value="-I${UV}/include/"/>
+		<compilerflag value='-I${LINC_UV_PATH}linc/'/>
+	</files>
+	<files id="__lib__">
+		<compilerflag value="-I${UV}/include/"/>
+		<compilerflag value='-I${LINC_UV_PATH}linc/'/>
 	</files>
 
 	<files id="haxe">
 		<file name="${UV}/src/fs-poll.c"/>
 		<file name="${UV}/src/idna.c"/>
 		<file name="${UV}/src/inet.c"/>
+		<file name="${UV}/src/random.c"/>
+		<file name="${UV}/src/strscpy.c"/>
+		<file name="${UV}/src/strtok.c"/>
+		<file name="${UV}/src/thread-common.c"/>
 		<file name="${UV}/src/threadpool.c"/>
 		<file name="${UV}/src/timer.c"/>
 		<file name="${UV}/src/uv-common.c"/>
@@ -33,7 +45,7 @@
 
 		<section if="windows">
 			<compilerflag value="-I${UV}/src/win/"/>
-			
+
 			<file name="${UV}/src/win/async.c"/>
 			<file name="${UV}/src/win/core.c"/>
 			<file name="${UV}/src/win/detect-wakeup.c"/>
@@ -60,10 +72,10 @@
 			<file name="${UV}/src/win/winapi.c"/>
 			<file name="${UV}/src/win/winsock.c"/>
 		</section>
-		
+
 		<section if="linux">
 			<compilerflag value="-I${UV}/src/unix/"/>
-			
+
 			<file name="${UV}/src/unix/async.c"/>
 			<file name="${UV}/src/unix/core.c"/>
 			<file name="${UV}/src/unix/dl.c"/>
@@ -75,26 +87,26 @@
 			<file name="${UV}/src/unix/pipe.c"/>
 			<file name="${UV}/src/unix/poll.c"/>
 			<file name="${UV}/src/unix/process.c"/>
+			<file name="${UV}/src/unix/random-devurandom.c"/>
 			<file name="${UV}/src/unix/signal.c"/>
 			<file name="${UV}/src/unix/stream.c"/>
 			<file name="${UV}/src/unix/tcp.c"/>
 			<file name="${UV}/src/unix/thread.c"/>
 			<file name="${UV}/src/unix/tty.c"/>
 			<file name="${UV}/src/unix/udp.c"/>
-			
+
 			<file name="${UV}/src/unix/proctitle.c"/>
-			
-			<file name="${UV}/src/unix/linux-core.c"/>
-			<file name="${UV}/src/unix/linux-inotify.c"/>
-			<file name="${UV}/src/unix/linux-syscalls.c"/>
+
+			<file name="${UV}/src/unix/linux.c"/>
 			<file name="${UV}/src/unix/procfs-exepath.c"/>
-			<file name="${UV}/src/unix/sysinfo-loadavg.c"/>
-			<file name="${UV}/src/unix/sysinfo-memory.c"/>
+			<file name="${UV}/src/unix/random-getentropy.c"/>
+			<file name="${UV}/src/unix/random-getrandom.c"/>
+			<file name="${UV}/src/unix/random-sysctl-linux.c"/>
 		</section>
 
-		<section if="macos">
+		<section if="mac || macos">
 			<compilerflag value="-I${UV}/src/unix/"/>
-			
+
 			<file name="${UV}/src/unix/async.c"/>
 			<file name="${UV}/src/unix/core.c"/>
 			<file name="${UV}/src/unix/dl.c"/>
@@ -106,29 +118,27 @@
 			<file name="${UV}/src/unix/pipe.c"/>
 			<file name="${UV}/src/unix/poll.c"/>
 			<file name="${UV}/src/unix/process.c"/>
+			<file name="${UV}/src/unix/random-devurandom.c"/>
 			<file name="${UV}/src/unix/signal.c"/>
 			<file name="${UV}/src/unix/stream.c"/>
 			<file name="${UV}/src/unix/tcp.c"/>
 			<file name="${UV}/src/unix/thread.c"/>
 			<file name="${UV}/src/unix/tty.c"/>
 			<file name="${UV}/src/unix/udp.c"/>
-			
+
 			<file name="${UV}/src/unix/proctitle.c"/>
-			
+
 			<file name="${UV}/src/unix/bsd-ifaddrs.c"/>
 			<file name="${UV}/src/unix/kqueue.c"/>
-			
+
 			<file name="${UV}/src/unix/darwin-proctitle.c"/>
 			<file name="${UV}/src/unix/darwin.c"/>
 			<file name="${UV}/src/unix/fsevents.c"/>
-		</section>	
-		
-
+			<file name="${UV}/src/unix/random-getentropy.c"/>
+		</section>
 	</files>
 
 	<target id="haxe">
-
-		<!-- add linker flags to the haxe build output -->
 		<section if="windows">
 			<lib name='advapi32.lib'/>
 			<lib name='iphlpapi.lib'/>
@@ -139,16 +149,12 @@
 			<lib name='ws2_32.lib'/>
 		</section>
 		<section if="linux">
-			<!--
-			pthread
-			dl
-			rt
-			-->
+			<lib name="-lpthread"/>
+			<lib name="-ldl"/>
+			<lib name="-lrt"/>
 		</section>
-		<section if="macos">
-			<!--
-			pthread
-			-->
+		<section if="mac || macos">
+			<lib name="-lpthread"/>
 		</section>
 	</target>
 

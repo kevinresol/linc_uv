@@ -1,0 +1,11 @@
+{
+	"name": "linc_uv",
+	"classPath": "src",
+	"dependencies": {},
+	"url": "https://github.com/kevinresol/linc_uv/",
+	"contributors": ["kevinresol"],
+	"version": "0.1.0",
+	"releasenote": "Initial release.",
+	"tags": ["linc", "libuv"],
+	"license": "MIT"
+}

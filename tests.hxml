@@ -1,0 +1,3 @@
+-main Test
+-cp tests
+-lib linc_uv
