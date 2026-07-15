@@ -36,6 +36,8 @@ class Test {
 	static var expectedCloses = 0;
 
 	static function main() {
+		TestEventLoop.run();
+
 		loop = Loop.DEFAULT;
 
 		bindAddr = new SockAddrIn();

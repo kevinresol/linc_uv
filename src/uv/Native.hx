@@ -6,6 +6,7 @@ import uv.Stream.Stream_t;
 import uv.Connect.Connect_t;
 import uv.Write.Write_t;
 import uv.Shutdown.Shutdown_t;
+import uv.Timer.Timer_t;
 
 /**
 	Plain C struct aliases for libuv callback ABIs.
@@ -61,4 +62,7 @@ class Native {
 
 	public static inline function shutdown(p:Star<UvShutdown>):Shutdown_t
 		return untyped __cpp__('::cpp::marshal::PointerType< ::uv_shutdown_t >({0})', p);
+
+	public static inline function timer(p:Star<UvTimer>):Timer_t
+		return untyped __cpp__('::cpp::marshal::PointerType< ::uv_timer_t >({0})', p);
 }

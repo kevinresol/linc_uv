@@ -1,0 +1,4 @@
+-main TestEventLoopOptOut
+-cp tests
+-lib linc_uv
+-D linc_uv_no_eventloop

@@ -1,4 +1,2 @@
--cp src
--D linc_uv
 uv.EventLoopHook
 --macro uv.Macro.setup()

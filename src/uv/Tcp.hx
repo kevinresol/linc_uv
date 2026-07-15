@@ -41,17 +41,37 @@ abstract Tcp(Tcp_t) from Tcp_t to Tcp_t {
 	public inline function keepalive(enable:Bool, delay:UInt)
 		return Uv.tcp_keepalive(this, enable ? 1 : 0, delay);
 
-	public function getSockAddress() {
-		var name = new SockAddrStorage();
-		var namelen = name.sizeof();
-		Uv.tcp_getsockname(this, name, Pointer.addressOf(namelen).ptr);
-		return name.asSockAddrIn().getAddress();
+	public function getSockAddress():{host:String, port:Int} {
+		var host:String = null;
+		var port = 0;
+		untyped __cpp__('
+			sockaddr_storage _name;
+			int _namelen = sizeof(_name);
+			uv_tcp_getsockname({0}, (sockaddr*)&_name, &_namelen);
+			sockaddr_in *_in = (sockaddr_in*)&_name;
+			char _addr[64];
+			_addr[0] = 0;
+			uv_ip4_name(_in, _addr, sizeof(_addr));
+			{1} = ::String(_addr);
+			{2} = (int)ntohs(_in->sin_port);
+		', this, host, port);
+		return {host: host, port: port};
 	}
 
-	public function getPeerAddress() {
-		var name = new SockAddrStorage();
-		var namelen = name.sizeof();
-		Uv.tcp_getpeername(this, name, Pointer.addressOf(namelen).ptr);
-		return name.asSockAddrIn().getAddress();
+	public function getPeerAddress():{host:String, port:Int} {
+		var host:String = null;
+		var port = 0;
+		untyped __cpp__('
+			sockaddr_storage _name;
+			int _namelen = sizeof(_name);
+			uv_tcp_getpeername({0}, (sockaddr*)&_name, &_namelen);
+			sockaddr_in *_in = (sockaddr_in*)&_name;
+			char _addr[64];
+			_addr[0] = 0;
+			uv_ip4_name(_in, _addr, sizeof(_addr));
+			{1} = ::String(_addr);
+			{2} = (int)ntohs(_in->sin_port);
+		', this, host, port);
+		return {host: host, port: port};
 	}
 }
