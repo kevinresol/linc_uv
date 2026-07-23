@@ -7,5 +7,8 @@
 	"version": "0.1.0",
 	"releasenote": "Initial release.",
 	"tags": ["linc", "libuv"],
-	"license": "MIT"
+	"license": "MIT",
+	"dependencies": {
+		"haxe12998": ""
+	}
 }
