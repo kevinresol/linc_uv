@@ -17,23 +17,39 @@ abstract Loop(Loop_t) from Loop_t to Loop_t {
 		return Uv.default_loop();
 
 	/**
-		Returns the libuv loop attached to `loop`'s `nativeLoop`, creating one if needed.
-		Main event loop uses `Loop.DEFAULT`; other loops get a fresh `uv_loop_t`.
+		Attach a libuv loop to `loop` as its waiting driver and return the UV
+		`Loop` **synchronously**.
+
+		Install uses `swapDriver`: when called from an event callback (`inLoop`)
+		or another thread, apply is deferred until the next `applyPendingSwap`.
+		A pending UV swap counts as external work so `loop()` cannot idle-exit
+		before the driver is published. Idempotent: if a UV driver is already
+		current or pending for this EventLoop, its loop is reused.
+
+		Main event loop uses `Loop.DEFAULT` with `isDefault=true`; other loops
+		get a fresh `uv_loop_t` with `isDefault=false`.
 	**/
 	public static function getFromEventLoop(loop:haxe.EventLoop):Loop {
-		if (@:privateAccess loop.nativeLoop == null) {
-			if (loop == haxe.EventLoop.main)
-				@:privateAccess loop.nativeLoop = new LoopWrapper(DEFAULT);
-			else {
-				final custom = new Loop();
-				final err = custom.init();
-				if (err != 0)
-					throw 'uv_loop_init failed: $err';
-				@:privateAccess loop.nativeLoop = new LoopWrapper(custom);
-			}
-		}
-		final wrapped:LoopWrapper = cast @:privateAccess loop.nativeLoop;
-		return wrapped.uvLoop;
+		final current = loop.getDriver();
+		if (Std.isOfType(current, UvEventLoopDriver))
+			return (cast current : UvEventLoopDriver).uvLoop;
+		final pending = loop.getPendingDriver();
+		if (pending != null && Std.isOfType(pending, UvEventLoopDriver))
+			return (cast pending : UvEventLoopDriver).uvLoop;
+
+		final isDefault = loop == haxe.EventLoop.main;
+		final uvLoop = if (isDefault) {
+			DEFAULT;
+		} else {
+			final custom = new Loop();
+			final err = custom.init();
+			if (err != 0)
+				throw 'uv_loop_init failed: $err';
+			custom;
+		};
+		final driver = new UvEventLoopDriver(uvLoop, isDefault);
+		loop.swapDriver(driver);
+		return uvLoop;
 	}
 
 	public inline function new()
@@ -74,27 +90,4 @@ abstract Loop(Loop_t) from Loop_t to Loop_t {
 
 	public inline function write(req:Fs, file, bufs, nbufs, offset, cb)
 		return Uv.fs_write(this, req, file, bufs, nbufs, offset, cb);
-}
-
-private class LoopWrapper {
-	public final allowsReentrancy = false;
-	public final uvLoop:Loop;
-
-	public function new(loop:Loop) {
-		this.uvLoop = loop;
-	}
-
-	public function run() {
-		uvLoop.run(Uv.RUN_NOWAIT);
-	}
-
-	public function close() {
-		final result = uvLoop.close();
-		if (result != 0)
-			Sys.println("Some async handlers have not been closed");
-	}
-
-	public function isAlive() {
-		return uvLoop.alive();
-	}
 }
