@@ -4,6 +4,7 @@ import uv.Loop.Loop_t;
 import uv.Tcp.Tcp_t;
 import uv.Pipe.Pipe_t;
 import uv.Timer.Timer_t;
+import uv.Async.Async_t;
 import uv.Connect.Connect_t;
 import uv.Write.Write_t;
 import uv.Shutdown.Shutdown_t;
@@ -27,6 +28,9 @@ extern class Alloc {
 
 	@:native('linc::uv::alloc_timer')
 	public static function timer():Timer_t;
+
+	@:native('linc::uv::alloc_async')
+	public static function async():Async_t;
 
 	@:native('linc::uv::alloc_connect')
 	public static function connect():Connect_t;

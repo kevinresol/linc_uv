@@ -7,6 +7,7 @@ import uv.Connect.Connect_t;
 import uv.Write.Write_t;
 import uv.Shutdown.Shutdown_t;
 import uv.Timer.Timer_t;
+import uv.Async.Async_t;
 
 /**
 	Plain C struct aliases for libuv callback ABIs.
@@ -38,6 +39,9 @@ extern class UvShutdown {}
 @:native('uv_timer_t')
 extern class UvTimer {}
 
+@:native('uv_async_t')
+extern class UvAsync {}
+
 @:native('uv_fs_t')
 extern class UvFs {}
 
@@ -65,4 +69,7 @@ class Native {
 
 	public static inline function timer(p:Star<UvTimer>):Timer_t
 		return untyped __cpp__('::cpp::marshal::PointerType< ::uv_timer_t >({0})', p);
+
+	public static inline function async(p:Star<UvAsync>):Async_t
+		return untyped __cpp__('::cpp::marshal::PointerType< ::uv_async_t >({0})', p);
 }

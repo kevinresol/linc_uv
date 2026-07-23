@@ -33,6 +33,10 @@ namespace uv {
 		return (uv_timer_t *)malloc(uv_handle_size(UV_TIMER));
 	}
 
+	inline uv_async_t *alloc_async() {
+		return (uv_async_t *)malloc(uv_handle_size(UV_ASYNC));
+	}
+
 	inline uv_connect_t *alloc_connect() {
 		return (uv_connect_t *)malloc(uv_req_size(UV_CONNECT));
 	}

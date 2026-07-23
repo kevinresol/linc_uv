@@ -8,6 +8,7 @@ import uv.Native.UvConnect;
 import uv.Native.UvWrite;
 import uv.Native.UvShutdown;
 import uv.Native.UvTimer;
+import uv.Native.UvAsync;
 import uv.Native.UvFs;
 import uv.Native.UvGetAddrInfo;
 import uv.Native.UvGetNameInfo;
@@ -17,6 +18,7 @@ import uv.Stream.Stream_t;
 import uv.Tcp.Tcp_t;
 import uv.Pipe.Pipe_t;
 import uv.Timer.Timer_t;
+import uv.Async.Async_t;
 import uv.Connect.Connect_t;
 import uv.Write.Write_t;
 import uv.Shutdown.Shutdown_t;
@@ -169,6 +171,10 @@ extern class Uv {
 	@:native("uv_timer_init") public static function timer_init(loop:Loop_t, timer:Timer_t):Int;
 	@:native("uv_timer_start") public static function timer_start(timer:Timer_t, cb:Callable<Star<UvTimer>->Void>, timeout:UInt64, repeat:UInt64):Int;
 	@:native("uv_timer_stop") public static function timer_stop(timer:Timer_t):Int;
+
+	// async
+	@:native("uv_async_init") public static function async_init(loop:Loop_t, async:Async_t, cb:Callable<Star<UvAsync>->Void>):Int;
+	@:native("uv_async_send") public static function async_send(async:Async_t):Int;
 
 	// tcp
 	@:native("uv_tcp_init") public static function tcp_init(loop:Loop_t, handle:Tcp_t):Int;
