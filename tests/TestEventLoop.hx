@@ -6,7 +6,7 @@ import uv.Native.UvHandle;
 import uv.Native.UvTimer;
 
 /**
-	Smoke: libuv timer driven by `haxe.EventLoop` via `nativeLoop` (RUN_NOWAIT).
+	Smoke: libuv timer driven by `haxe.EventLoop` via UvEventLoopDriver (RUN_NOWAIT).
 **/
 class TestEventLoop {
 	static var timer:Timer;
@@ -14,8 +14,8 @@ class TestEventLoop {
 	static var closed = false;
 
 	public static function run() {
-		if (@:privateAccess haxe.EventLoop.main.nativeLoop == null)
-			throw "EventLoop.main.nativeLoop was not auto-registered";
+		if (!Std.isOfType(haxe.EventLoop.main.getDriver(), UvEventLoopDriver))
+			throw "EventLoop.main driver was not auto-registered as UvEventLoopDriver";
 
 		final loop = Loop.getFromEventLoop(haxe.EventLoop.main);
 		if (loop != Loop.DEFAULT)

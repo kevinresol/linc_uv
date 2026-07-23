@@ -1,7 +1,6 @@
 package uv;
 
 import cpp.*;
-
 import uv.Native.UvHandle;
 import uv.Native.UvStream;
 import uv.Native.UvConnect;
@@ -35,7 +34,7 @@ import uv.AddrInfo.AddrInfo_s;
 @:keep
 @:include('linc_uv.h')
 @:build(linc.Linc.touch())
-@:build(linc.Linc.xml('uv', '../../'))
+@:build(linc.Linc.xml('uv', '../'))
 extern class Uv {
 	// error
 	@:native("UV_E2BIG") public static var E2BIG:Int;
@@ -179,7 +178,8 @@ extern class Uv {
 	// tcp
 	@:native("uv_tcp_init") public static function tcp_init(loop:Loop_t, handle:Tcp_t):Int;
 	@:native("linc::uv::tcp_bind") public static function tcp_bind(handle:Tcp_t, addr:SockAddrIn_s, flags:Int):Int;
-	@:native("linc::uv::tcp_connect") public static function tcp_connect(req:Connect_t, handle:Tcp_t, addr:SockAddrIn_s, cb:Callable<Star<UvConnect>->Int->Void>):Int;
+	@:native("linc::uv::tcp_connect") public static function tcp_connect(req:Connect_t, handle:Tcp_t, addr:SockAddrIn_s,
+		cb:Callable<Star<UvConnect>->Int->Void>):Int;
 	@:native("uv_tcp_getsockname") public static function tcp_getsockname(handle:Tcp_t, name:SockAddrStorage_s, namelen:Star<Int>):Int;
 	@:native("uv_tcp_getpeername") public static function tcp_getpeername(handle:Tcp_t, name:SockAddrStorage_s, namelen:Star<Int>):Int;
 	@:native("uv_tcp_nodelay") public static function tcp_nodelay(handle:Tcp_t, enable:Int):Int;
@@ -210,20 +210,22 @@ extern class Uv {
 	// fs
 	@:native("uv_fs_open") public static function fs_open(loop:Loop_t, req:Fs_t, path:ConstCharStar, flags:Int, mode:Int, cb:Callable<Star<UvFs>->Void>):Int;
 	@:native("uv_fs_close") public static function fs_close(loop:Loop_t, req:Fs_t, file:File, cb:Callable<Star<UvFs>->Void>):Int;
-	@:native("uv_fs_read") public static function fs_read(loop:Loop_t, req:Fs_t, file:File, bufs:Buf_t, nbufs:UInt32, offset:UInt64, cb:Callable<Star<UvFs>->Void>):Int;
+	@:native("uv_fs_read") public static function fs_read(loop:Loop_t, req:Fs_t, file:File, bufs:Buf_t, nbufs:UInt32, offset:UInt64,
+		cb:Callable<Star<UvFs>->Void>):Int;
 	@:native("uv_fs_unlink") public static function fs_unlink(loop:Loop_t, req:Fs_t, path:ConstCharStar, cb:Callable<Star<UvFs>->Void>):Int;
-	@:native("uv_fs_write") public static function fs_write(loop:Loop_t, req:Fs_t, file:File, bufs:Buf_t, nbufs:UInt32, offset:UInt64, cb:Callable<Star<UvFs>->Void>):Int;
+	@:native("uv_fs_write") public static function fs_write(loop:Loop_t, req:Fs_t, file:File, bufs:Buf_t, nbufs:UInt32, offset:UInt64,
+		cb:Callable<Star<UvFs>->Void>):Int;
 
 	// pipe
 	@:native("uv_pipe_init") public static function pipe_init(loop:Loop_t, handle:Pipe_t, ipc:Int):Int;
 	@:native("uv_pipe_open") public static function pipe_open(handle:Pipe_t, file:File):Int;
 
 	// dns
-	@:native("uv_getaddrinfo") public static function getaddrinfo(loop:Loop_t, req:GetAddrInfo_t, getaddrinfo_cb:Callable<Star<UvGetAddrInfo>->Int->RawPointer<cpp.Void>->Void>,
-		node:ConstCharStar, service:ConstCharStar, hints:AddrInfo_s):Int;
+	@:native("uv_getaddrinfo") public static function getaddrinfo(loop:Loop_t, req:GetAddrInfo_t,
+		getaddrinfo_cb:Callable<Star<UvGetAddrInfo>->Int->RawPointer<cpp.Void>->Void>, node:ConstCharStar, service:ConstCharStar, hints:AddrInfo_s):Int;
 	@:native("uv_freeaddrinfo") public static function freeaddrinfo(ai:RawPointer<cpp.Void>):Void;
-	@:native("uv_getnameinfo") public static function getnameinfo(loop:Loop_t, req:GetNameInfo_t, getnameinfo_cb:Callable<Star<UvGetNameInfo>->Int->ConstCharStar->ConstCharStar->Void>,
-		addr:SockAddr_s, flags:Int):Int;
+	@:native("uv_getnameinfo") public static function getnameinfo(loop:Loop_t, req:GetNameInfo_t,
+		getnameinfo_cb:Callable<Star<UvGetNameInfo>->Int->ConstCharStar->ConstCharStar->Void>, addr:SockAddr_s, flags:Int):Int;
 
 	// misc
 	@:native("uv_buf_init") public static function buf_init(base:Star<Char>, len:UInt32):Buf_t;
@@ -233,5 +235,3 @@ extern class Uv {
 	@:native("uv_inet_ntop") public static function inet_ntop(af:Int, src:ConstStar<cpp.Void>, dst:Star<Char>, size:SizeT):Int;
 	@:native("uv_inet_pton") public static function inet_pton(af:Int, src:ConstCharStar, dst:Star<cpp.Void>):Int;
 }
-
-

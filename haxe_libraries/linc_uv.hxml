@@ -1,4 +1,5 @@
 -cp src
 -D linc_uv
+-lib haxe12998
 uv.EventLoopHook
 --macro uv.Macro.setup()

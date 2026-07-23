@@ -3,7 +3,8 @@
 	<!-- For a more in depth guide: https://github.com/snowkit/hxcpp-guide -->
 	<!-- References: https://github.com/libuv/libuv/blob/v1.x/CMakeLists.txt -->
 
-	<set name="UV" value="${LINC_UV_PATH}lib/libuv" />
+	<!-- LINC_UV_PATH is src/ (parent of linc/); libuv lives at the repo root -->
+	<set name="UV" value="${LINC_UV_PATH}../lib/libuv" />
 
 	<files id="haxe">
 		<compilerflag value='-I${UV}'/>

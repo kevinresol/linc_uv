@@ -1,7 +1,7 @@
 #ifndef _LINC_UV_H_
 #define _LINC_UV_H_
 
-#include "../lib/libuv/include/uv.h"
+#include <uv.h>
 #include <hxcpp.h>
 #include <stdlib.h>
 
