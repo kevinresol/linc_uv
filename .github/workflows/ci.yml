@@ -36,5 +36,13 @@ jobs:
       - name: Install Haxe Libraries
         run: lix download
 
+      - name: Compile hxcpp tools
+        if: contains(matrix.target, 'cpp') && matrix.haxe-version == 'nightly'
+        run: |
+          HXCPP_LIBPATH=$(haxelib libpath hxcpp)
+          pushd "$HXCPP_LIBPATH"/tools/hxcpp
+          haxe compile.hxml
+          popd
+
       - name: Run Test
         run: lix run travix ${{ matrix.target }} ${{ matrix.flags }}
