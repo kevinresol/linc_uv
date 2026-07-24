@@ -2,7 +2,9 @@
 #define _LINC_UV_H_
 
 #include <uv.h>
+#ifndef HXCPP_H
 #include <hxcpp.h>
+#endif
 #include <stdlib.h>
 
 namespace linc {
