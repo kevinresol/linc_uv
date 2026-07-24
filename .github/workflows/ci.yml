@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: Check out repo
         uses: actions/checkout@v6
+        with:
+          submodules: recursive
 
       - name: Cache Haxe
         uses: actions/cache@v6
