@@ -20,6 +20,11 @@ import uv.Async.Async_t;
 	cpp.Star in the hxcpp pointers cookbook). Native.* rewraps Star → PointerType
 	for abstracts. Prefer Star over RawPointer for object callbacks; keep RawPointer
 	for C arrays / opaque blobs (e.g. addrinfo*).
+
+	Important (hxcpp PointerReference): store Native.* / abstract results in a local
+	before calling methods. Chaining like `(Native.stream(p):Stream).accept(...)`
+	builds a PointerReference to a temporary PointerType; after the expression the
+	reference dangles (often a segfault or "Null Object Reference" on Linux).
 **/
 @:native('uv_handle_t')
 extern class UvHandle {}

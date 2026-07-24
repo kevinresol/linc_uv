@@ -78,7 +78,10 @@ class Test {
 		serverClient = new Tcp();
 		hasServerClient = true;
 		assertOk(serverClient.init(loop), "accept client init");
-		assertOk((Native.stream(stream) : Stream).accept(serverClient.asStream()), "accept");
+		// Keep Native.stream in a local — chained method calls on a temporary
+		// PointerType dangle via PointerReference (Linux segfault).
+		final serverStream:Stream = Native.stream(stream);
+		assertOk(serverStream.accept(serverClient.asStream()), "accept");
 		assertOk(serverClient.asStream().readStart(Callable.fromStaticFunction(onServerAlloc), Callable.fromStaticFunction(onServerRead)),
 			"server readStart");
 	}
@@ -126,7 +129,9 @@ class Test {
 		clientWriteBuf.alloc(bytes.length);
 		clientWriteBuf.copyFromBytes(bytes, bytes.length);
 
-		final stream = (Native.connect(req) : Connect).handle;
+		// Use client handle directly — (Native.connect(req):Connect).handle
+		// dangles a PointerReference to a temporary (Null Object Reference on Linux).
+		final stream = client.asStream();
 		assertOk(stream.write(clientWriteReq, clientWriteBuf, 1, Callable.fromStaticFunction(onClientWrite)), "client write");
 		assertOk(stream.readStart(Callable.fromStaticFunction(onClientAlloc), Callable.fromStaticFunction(onClientRead)), "client readStart");
 	}
