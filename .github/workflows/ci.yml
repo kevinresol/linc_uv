@@ -7,9 +7,6 @@ on:
 jobs:
   test:
     runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: bash
     strategy:
       fail-fast: false
       matrix:
@@ -32,8 +29,8 @@ jobs:
       - name: Cache Haxe
         uses: actions/cache@v6
         with:
-          path: ~/haxe
-          key: haxe-${{ matrix.os }}-${{ matrix.haxe-version }}
+          path: ${{ startsWith(runner.os, 'windows') && '%AppData%' || '~/haxe' }}
+          key: ${{ runner.os }}-haxe
 
       - name: Install Lix
         uses: lix-pm/setup-lix@master
