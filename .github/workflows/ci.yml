@@ -14,11 +14,8 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - ubuntu-latest
           - windows-latest
-          - macos-latest
         haxe-version:
-          # - stable
           - nightly
         target:
           - cpp
@@ -33,12 +30,26 @@ jobs:
         uses: actions/cache@v6
         with:
           path: ${{ startsWith(runner.os, 'windows') && '%AppData%' || '~/haxe' }}
-          key: ${{ runner.os }}-haxe
+          key: ${{ runner.os }}-haxe-win-repro
 
       - name: Install Lix
         uses: lix-pm/setup-lix@master
         with:
           lix-version: 17.0.4-alpha.0
+
+      - name: Overlay haxeshim from kevinresol/haxeshim@win (no WindowsExe wrap)
+        run: |
+          set -euo pipefail
+          git clone --depth 1 --branch win https://github.com/kevinresol/haxeshim.git /tmp/haxeshim
+          cd /tmp/haxeshim
+          lix download
+          haxe all.hxml
+          LIX_ROOT="$(npm root -g)/lix"
+          cp -f bin/*.js "$LIX_ROOT/bin/"
+          echo "Overlaid haxeshim shims from kevinresol/haxeshim@win into $LIX_ROOT/bin"
+          ls -la "$LIX_ROOT/bin"
+          git -C /tmp/haxeshim rev-parse HEAD
+          git -C /tmp/haxeshim log -1 --oneline
 
       - name: Install Haxe
         run: lix install haxe ${{ matrix.haxe-version }}
@@ -53,14 +64,6 @@ jobs:
           $HXCPP_LIBPATH = haxelib libpath hxcpp
           Set-Location "$HXCPP_LIBPATH/tools/hxcpp"
           haxe compile.hxml
-
-      - name: Compile hxcpp tools
-        if: ${{ !startsWith(runner.os, 'windows') && contains(matrix.target, 'cpp') && matrix.haxe-version == 'nightly' }}
-        run: |
-          HXCPP_LIBPATH=$(haxelib libpath hxcpp)
-          pushd "$HXCPP_LIBPATH"/tools/hxcpp
-          haxe compile.hxml
-          popd
 
       - name: Run Test
         run: lix run travix ${{ matrix.target }} ${{ matrix.flags }}
