@@ -44,8 +44,16 @@ jobs:
       - name: Install Haxe Libraries
         run: lix download
 
+      - name: Compile hxcpp tools (Windows)
+        if: startsWith(runner.os, 'windows') && contains(matrix.target, 'cpp') && matrix.haxe-version == 'nightly'
+        shell: pwsh
+        run: |
+          $HXCPP_LIBPATH = haxelib libpath hxcpp
+          Set-Location "$HXCPP_LIBPATH/tools/hxcpp"
+          haxe compile.hxml
+
       - name: Compile hxcpp tools
-        if: contains(matrix.target, 'cpp') && matrix.haxe-version == 'nightly'
+        if: ${{ !startsWith(runner.os, 'windows') && contains(matrix.target, 'cpp') && matrix.haxe-version == 'nightly' }}
         run: |
           HXCPP_LIBPATH=$(haxelib libpath hxcpp)
           pushd "$HXCPP_LIBPATH"/tools/hxcpp
